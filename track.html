@@ -1,75 +1,618 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Live Location Map</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- Leaflet Map Library -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Indrawar Sweets Place, Bidhuna | Best Sweets Shop in Bidhuna</title>
+  <meta
+    name="description"
+    content="Indrawar Sweets Place in Bidhuna offers traditional Indian sweets, fresh dairy products, namkeen, festival specials, and custom wedding sweet boxes."
+  />
+  <meta
+    name="keywords"
+    content="Best sweets shop in Bidhuna, Indrawar Sweets Place, Fresh sweets in Bidhuna, Indian sweets, wedding sweet boxes"
+  />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
   <link
     rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    integrity="sha512-SnH5WK+bZxgPHs44uWix+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkR4j8Yg9wF8Q0Yq8s4+Q4B4R8R0w8AV2XpA=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
   />
-  <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
-  </script>
-
   <style>
-    body { font-family: Arial; text-align: center; }
-    #map { height: 400px; margin-top: 20px; }
-    button { padding: 15px 25px; font-size: 16px; }
-  </style>
-</head>
+    :root {
+      --saffron: #d97706;
+      --saffron-deep: #b45309;
+      --cream: #fff8e7;
+      --gold: #d4af37;
+      --text-dark: #3f2d1d;
+      --text-muted: #6f5a45;
+      --white: #ffffff;
+      --shadow: 0 10px 30px rgba(87, 52, 25, 0.15);
+    }
 
-<body>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-  <h2>📍 Share Your Location</h2>
-  <p>Tap once to share your live location</p>
+    html {
+      scroll-behavior: smooth;
+    }
 
-  <button onclick="shareLocation()">Share Location</button>
+    body {
+      font-family: "Poppins", sans-serif;
+      color: var(--text-dark);
+      background: linear-gradient(180deg, #fffdf8 0%, var(--cream) 100%);
+      line-height: 1.6;
+    }
 
-  <div id="map"></div>
-  <p id="info"></p>
+    img {
+      width: 100%;
+      display: block;
+      border-radius: 14px;
+      object-fit: cover;
+    }
 
-  <script>
-    let map, marker;
+    .container {
+      width: min(1120px, 92%);
+      margin: 0 auto;
+    }
 
-    function shareLocation() {
-      if (!navigator.geolocation) {
-        alert("Geolocation not supported");
-        return;
+    .section {
+      padding: 4.5rem 0;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(2rem, 3.7vw, 3rem);
+      text-align: center;
+      margin-bottom: 1rem;
+      color: var(--saffron-deep);
+    }
+
+    .section-subtitle {
+      text-align: center;
+      max-width: 720px;
+      margin: 0 auto 2.3rem;
+      color: var(--text-muted);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeUp 0.8s ease forwards;
+    }
+
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      background: rgba(255, 248, 231, 0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(212, 175, 55, 0.25);
+    }
+
+    .nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.9rem 0;
+    }
+
+    .logo {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1.55rem;
+      font-weight: 700;
+      color: var(--saffron-deep);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-dark);
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--saffron);
+    }
+
+    .hero {
+      position: relative;
+      min-height: 85vh;
+      background: linear-gradient(rgba(35, 18, 8, 0.48), rgba(35, 18, 8, 0.56)),
+        url("https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=1600&q=80") center/cover no-repeat;
+      display: flex;
+      align-items: center;
+      color: var(--white);
+    }
+
+    .hero-content h1 {
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(2.2rem, 5vw, 4.2rem);
+      line-height: 1.12;
+      margin-bottom: 1rem;
+    }
+
+    .hero-content p {
+      max-width: 620px;
+      font-size: 1.06rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 0.9rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.78rem 1.3rem;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.28s ease;
+      border: 2px solid transparent;
+    }
+
+    .btn-primary {
+      background: var(--saffron);
+      color: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border-color: var(--gold);
+      color: var(--white);
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      filter: brightness(1.05);
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1.2rem;
+    }
+
+    .card {
+      background: var(--white);
+      padding: 1.1rem;
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+    }
+
+    .card h3 {
+      margin: 0.8rem 0 0.35rem;
+      color: var(--saffron-deep);
+    }
+
+    .about-grid,
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.4rem;
+      align-items: center;
+    }
+
+    .highlight {
+      background: #fff2cc;
+      border-left: 5px solid var(--gold);
+      padding: 1.1rem;
+      border-radius: 12px;
+      margin-top: 1rem;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+
+    .menu-card {
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      border-radius: 14px;
+      padding: 1rem;
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .menu-card h3 {
+      color: var(--saffron-deep);
+      margin-bottom: 0.7rem;
+    }
+
+    .menu-card ul {
+      list-style: none;
+    }
+
+    .menu-card li {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.42rem 0;
+      border-bottom: 1px dashed #e2c98f;
+      gap: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .menu-card li:last-child {
+      border-bottom: none;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+
+    .gallery-grid img {
+      height: 230px;
+      transition: transform 0.35s ease, box-shadow 0.35s ease;
+      box-shadow: var(--shadow);
+    }
+
+    .gallery-grid img:hover {
+      transform: scale(1.03);
+    }
+
+    .reviews {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+
+    .review {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 1rem;
+      box-shadow: var(--shadow);
+    }
+
+    .stars {
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+
+    .contact-box {
+      background: var(--white);
+      border-radius: 14px;
+      padding: 1rem;
+      box-shadow: var(--shadow);
+    }
+
+    .contact-box p {
+      margin: 0.5rem 0;
+      color: var(--text-muted);
+    }
+
+    .contact-box a {
+      color: var(--saffron-deep);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 0.8rem;
+    }
+
+    .form-grid input,
+    .form-grid textarea {
+      width: 100%;
+      border: 1px solid #e3c891;
+      border-radius: 10px;
+      padding: 0.7rem 0.75rem;
+      font: inherit;
+    }
+
+    .map {
+      border: 0;
+      width: 100%;
+      min-height: 250px;
+      border-radius: 12px;
+    }
+
+    footer {
+      background: #2e1d0d;
+      color: #fcefcf;
+      padding: 2rem 0;
+      margin-top: 2rem;
+    }
+
+    .footer-grid {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .socials {
+      display: flex;
+      gap: 0.8rem;
+      font-size: 1.2rem;
+    }
+
+    .socials a {
+      color: #fcefcf;
+      transition: color 0.3s ease;
+    }
+
+    .socials a:hover {
+      color: var(--gold);
+    }
+
+    @media (max-width: 720px) {
+      .nav-inner {
+        flex-direction: column;
+        gap: 0.7rem;
       }
 
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          const lat = pos.coords.latitude;
-          const lon = pos.coords.longitude;
-
-          document.getElementById("info").innerHTML =
-            `Latitude: ${lat}<br>Longitude: ${lon}`;
-
-          if (!map) {
-            map = L.map('map').setView([lat, lon], 15);
-
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-              attribution: '© OpenStreetMap'
-            }).addTo(map);
-
-            marker = L.marker([lat, lon]).addTo(map)
-              .bindPopup("📍 User Location")
-              .openPopup();
-          } else {
-            map.setView([lat, lon], 15);
-            marker.setLatLng([lat, lon]);
-          }
-        },
-        () => {
-          alert("Location permission denied");
-        }
-      );
+      .hero {
+        min-height: 70vh;
+      }
     }
-  </script>
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <div class="container nav-inner">
+      <a href="#home" class="logo">Indrawar Sweets Place</a>
+      <ul class="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#menu">Menu</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="#reviews">Reviews</a></li>
+      </ul>
+    </div>
+  </header>
 
+  <main>
+    <section id="home" class="hero">
+      <div class="container hero-content reveal">
+        <h1>Taste the Tradition of Pure Indian Sweets</h1>
+        <p>
+          Welcome to Indrawar Sweets Place, Bidhuna — where every bite reflects the rich
+          heritage of Uttar Pradesh. From classic mithai to festive assortments, we craft sweetness
+          with purity, care, and tradition.
+        </p>
+        <div class="btn-group">
+          <a href="#contact" class="btn btn-primary">Order Now</a>
+          <a href="#contact" class="btn btn-secondary">Visit Us</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title">Our Sweet Specialties</h2>
+        <p class="section-subtitle">Premium ingredients, authentic recipes, and unmatched freshness every day.</p>
+        <div class="cards">
+          <article class="card reveal" style="animation-delay: 0.1s;">
+            <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=900&q=80" alt="Traditional Indian sweets platter" loading="lazy">
+            <h3>Traditional Indian Sweets</h3>
+            <p>Laddu, barfi, peda, rasgulla, kaju katli, and handcrafted favorites.</p>
+          </article>
+          <article class="card reveal" style="animation-delay: 0.2s;">
+            <img src="https://images.unsplash.com/photo-1621303837174-89787a7d4729?auto=format&fit=crop&w=900&q=80" alt="Fresh dairy products" loading="lazy">
+            <h3>Fresh Dairy Products</h3>
+            <p>Daily fresh paneer, khoya, and dahi sourced with strict quality standards.</p>
+          </article>
+          <article class="card reveal" style="animation-delay: 0.3s;">
+            <img src="https://images.unsplash.com/photo-1606787366850-de6330128bfc?auto=format&fit=crop&w=900&q=80" alt="Namkeen and snacks" loading="lazy">
+            <h3>Namkeen & Snacks</h3>
+            <p>Crispy, spicy, and fresh namkeen varieties for tea-time and celebrations.</p>
+          </article>
+          <article class="card reveal" style="animation-delay: 0.4s;">
+            <img src="https://images.unsplash.com/photo-1511910849309-0f3f8f6b2eb7?auto=format&fit=crop&w=900&q=80" alt="Festival special sweet boxes" loading="lazy">
+            <h3>Festival & Wedding Boxes</h3>
+            <p>Elegant custom sweet boxes for weddings, gifting, and festive occasions.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="section">
+      <div class="container about-grid">
+        <div class="reveal">
+          <h2 class="section-title" style="text-align:left; margin-bottom: 0.6rem;">About Us</h2>
+          <p>
+            Indrawar Sweets Place has proudly served families in Bidhuna for decades, preserving
+            the essence of Indian mithai craftsmanship. Our sweets are prepared with traditional
+            recipes, hygienic methods, and premium ingredients.
+          </p>
+          <p>
+            With years of experience and a commitment to purity, we ensure every sweet and snack
+            carries the same homemade warmth and trusted quality.
+          </p>
+          <div class="highlight"><strong>Experience:</strong> Trusted by the local community for quality sweets and festive catering.</div>
+        </div>
+        <div class="reveal" style="animation-delay: 0.2s;">
+          <img src="https://images.unsplash.com/photo-1526367790999-0150786686a2?auto=format&fit=crop&w=1000&q=80" alt="Indian sweets shop counter" loading="lazy">
+        </div>
+      </div>
+    </section>
+
+    <section id="menu" class="section">
+      <div class="container">
+        <h2 class="section-title">Our Menu</h2>
+        <p class="section-subtitle">Browse our categories and approximate starting prices.</p>
+        <div class="menu-grid">
+          <article class="menu-card reveal">
+            <h3>Popular Sweets</h3>
+            <ul>
+              <li><span>Motichoor Laddu</span><span>₹420/kg</span></li>
+              <li><span>Milk Barfi</span><span>₹460/kg</span></li>
+              <li><span>Peda</span><span>₹480/kg</span></li>
+              <li><span>Kaju Katli</span><span>₹980/kg</span></li>
+              <li><span>Gulab Jamun</span><span>₹320/kg</span></li>
+            </ul>
+          </article>
+          <article class="menu-card reveal" style="animation-delay: 0.2s;">
+            <h3>Namkeen & Snacks</h3>
+            <ul>
+              <li><span>Aloo Bhujia</span><span>₹260/kg</span></li>
+              <li><span>Mixture Namkeen</span><span>₹300/kg</span></li>
+              <li><span>Mathri</span><span>₹240/kg</span></li>
+              <li><span>Khasta Kachori</span><span>₹20/piece</span></li>
+              <li><span>Samosa</span><span>₹15/piece</span></li>
+            </ul>
+          </article>
+          <article class="menu-card reveal" style="animation-delay: 0.3s;">
+            <h3>Special Festival Items</h3>
+            <ul>
+              <li><span>Desi Ghee Gujiya</span><span>₹580/kg</span></li>
+              <li><span>Soan Papdi Gift Box</span><span>₹380/box</span></li>
+              <li><span>Dry Fruit Laddu</span><span>₹1,150/kg</span></li>
+              <li><span>Assorted Festive Pack</span><span>₹650/box</span></li>
+              <li><span>Wedding Sweet Box</span><span>Custom</span></li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="gallery" class="section">
+      <div class="container">
+        <h2 class="section-title">Gallery</h2>
+        <p class="section-subtitle">A glimpse of our sweets, snacks, and premium wedding/festival packaging.</p>
+        <div class="gallery-grid">
+          <img class="reveal" src="https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&w=900&q=80" alt="Assorted mithai platter" loading="lazy">
+          <img class="reveal" style="animation-delay: 0.1s;" src="https://images.unsplash.com/photo-1571115764595-644a1f56a55c?auto=format&fit=crop&w=900&q=80" alt="Kaju katli sweets close up" loading="lazy">
+          <img class="reveal" style="animation-delay: 0.2s;" src="https://images.unsplash.com/photo-1604152135912-04a022e23696?auto=format&fit=crop&w=900&q=80" alt="Festival sweet gift box" loading="lazy">
+          <img class="reveal" style="animation-delay: 0.3s;" src="https://images.unsplash.com/photo-1603079651155-cb5f74a0f29d?auto=format&fit=crop&w=900&q=80" alt="Traditional Indian sweets display" loading="lazy">
+        </div>
+      </div>
+    </section>
+
+    <section id="reviews" class="section">
+      <div class="container">
+        <h2 class="section-title">Customer Reviews</h2>
+        <div class="reviews">
+          <article class="review reveal">
+            <div class="stars">★★★★★</div>
+            <p>“Best sweets shop in Bidhuna! Fresh taste and excellent quality every time.”</p>
+            <strong>— Aditi Sharma</strong>
+          </article>
+          <article class="review reveal" style="animation-delay: 0.1s;">
+            <div class="stars">★★★★★</div>
+            <p>“Their custom wedding boxes were beautiful and delicious. Highly recommended!”</p>
+            <strong>— Rohan Verma</strong>
+          </article>
+          <article class="review reveal" style="animation-delay: 0.2s;">
+            <div class="stars">★★★★★</div>
+            <p>“Fresh sweets in Bidhuna with authentic desi flavor. Loved the kaju katli.”</p>
+            <strong>— Neha Singh</strong>
+          </article>
+          <article class="review reveal" style="animation-delay: 0.3s;">
+            <div class="stars">★★★★☆</div>
+            <p>“Great namkeen and dairy products. Service is polite and timely.”</p>
+            <strong>— Manish Tiwari</strong>
+          </article>
+          <article class="review reveal" style="animation-delay: 0.4s;">
+            <div class="stars">★★★★★</div>
+            <p>“Festival specials are always top quality. Our family’s favorite sweet shop.”</p>
+            <strong>— Pooja Yadav</strong>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section">
+      <div class="container">
+        <h2 class="section-title">Order & Contact</h2>
+        <p class="section-subtitle">Place orders on WhatsApp, call us directly, or visit us in Bidhuna.</p>
+        <div class="contact-grid">
+          <div class="contact-box reveal">
+            <p><strong>WhatsApp:</strong> <a href="https://wa.me/919876543210" target="_blank" rel="noopener">+91 98765 43210</a></p>
+            <p><strong>Phone:</strong> <a href="tel:+919876543210">+91 98765 43210</a></p>
+            <p><strong>Address:</strong> Indrawar Sweets Place, Bidhuna, Uttar Pradesh, India</p>
+            <p><strong>Opening Hours:</strong> Daily, 8:00 AM – 10:00 PM</p>
+            <a class="btn btn-primary" href="https://wa.me/919876543210" target="_blank" rel="noopener">WhatsApp Order</a>
+          </div>
+
+          <form class="contact-box form-grid reveal" style="animation-delay: 0.2s;">
+            <input type="text" placeholder="Your Name" required />
+            <input type="tel" placeholder="Phone Number" required />
+            <input type="text" placeholder="Order / Subject" />
+            <textarea rows="4" placeholder="Message"></textarea>
+            <button type="submit" class="btn btn-primary" style="cursor: pointer;">Send Enquiry</button>
+          </form>
+        </div>
+
+        <div class="contact-box" style="margin-top: 1rem;">
+          <iframe
+            class="map"
+            loading="lazy"
+            allowfullscreen
+            referrerpolicy="no-referrer-when-downgrade"
+            src="https://www.google.com/maps?q=Bidhuna,+Uttar+Pradesh,+India&output=embed"
+            title="Google map for Bidhuna, Uttar Pradesh"
+          ></iframe>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-grid">
+      <div>
+        <strong>Indrawar Sweets Place, Bidhuna</strong>
+        <p>Bidhuna, Uttar Pradesh, India</p>
+        <p>© <span id="year"></span> Indrawar Sweets Place. All Rights Reserved.</p>
+      </div>
+      <div class="socials" aria-label="Social media links">
+        <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+        <a href="#" aria-label="X/Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    document.querySelector("form")?.addEventListener("submit", (event) => {
+      event.preventDefault();
+      alert("Thank you! We will contact you shortly.");
+      event.target.reset();
+    });
+  </script>
 </body>
 </html>
-
